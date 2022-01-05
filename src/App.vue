@@ -1,12 +1,14 @@
 <template>
   <div id="app">
-    <router-view/>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
     <main-tab-bar/>
   </div>
 </template>
 
 <script>
-import MainTabBar from "@/components/content/maintabbar/MainTabBar";
+import MainTabBar from "@/components/content/mainTabBar/MainTabBar";
 
 export default {
   name: 'App',
@@ -18,4 +20,8 @@ export default {
 
 <style>
   @import "~assets/css/base.css";
+
+  #app{
+    height: 100vh;
+  }
 </style>
