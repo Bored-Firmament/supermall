@@ -25,7 +25,7 @@
         :list="['流行','新款','精选']"
         @clickTabControlItem="clickTabControlItem"
         ref="tabControl2"/>
-      <goods-list :goods="showGoods"></goods-list>
+      <goods-list :goods="showGoods" ref="goods"></goods-list>
     </scroll>
 
     <back-top @click.native="backTop" v-show="isShowBackTop"/>
@@ -64,6 +64,7 @@
         isShowBackTop: false,
         isShowTabControl: false,
         tabControlTop: null,
+        goodsTop: null,
         scrollY: null,
       }
     },
@@ -95,6 +96,14 @@
     computed: {
       showGoods() {
         return this.goods[this.currentType].list;
+      },
+      getGoodsTabY: {
+        set(newValue) {
+          this.goods[this.currentType].scrollY = newValue;
+        },
+        get() {
+          return this.goods[this.currentType].scrollY;
+        }
       }
     },
     methods: {
@@ -102,6 +111,9 @@
        * 事件监听相关
        * */
       clickTabControlItem(event) {
+        // 获取 当前 商品类型 时所在的 y 值;
+        this.getGoodsTabY = this.$refs.scroll.getScrollY();
+        // 修改 当前 商品类型;
         switch (event){
           case 0:
             this.currentType = 'pop';
@@ -115,6 +127,12 @@
         }
         this.$refs.tabControl1.currentIndex = event;
         this.$refs.tabControl2.currentIndex = event;
+        // 滚动到 当前 商品类型 所在的 y 值;如果有的话;
+        if(this.getGoodsTabY && -this.getGoodsTabY >= this.goodsTop) {
+          this.$refs.scroll.scrollTo(0, this.getGoodsTabY, 0);
+        }else if(-this.getGoodsTabY < this.goodsTop) {
+          this.$refs.scroll.scrollTo(0, -this.goodsTop, 100);
+        }
       },
       // scroll 滚动时实时触发;
       contentScroll(position) {
@@ -129,9 +147,12 @@
       loadMore() {
         this.getHomeGoods(this.currentType);
       },
-      // 获取 scroll 中的 tab-control 的位置,以完成吸顶效果; 轮播图加载完成后触发该函数(否则图片未加载的位置不正确);
+      // 轮播图加载完成后触发该函数(否则图片未加载的位置不正确);
       swiperImgLoadFull() {
+        // 获取 tab-control 的位置,
         this.tabControlTop = this.$refs.tabControl2.$el.offsetTop;
+        // 获取 商品列表 的位置,
+        this.goodsTop = this.$refs.goods.$el.offsetTop - this.$refs.tabControl2.$el.offsetHeight;
       },
 
       /**
