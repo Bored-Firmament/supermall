@@ -1,4 +1,4 @@
-import { request } from "@/network/request";
+import { request } from "network/request";
 
 export function getHomeMultidata() {
   return request({

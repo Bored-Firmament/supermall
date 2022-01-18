@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <nav-bar>
+    <nav-bar class="home-nav-bar">
       <template v-slot:center>购物街</template>
     </nav-bar>
 
@@ -28,7 +28,7 @@
       <goods-list :goods="showGoods" ref="goods"></goods-list>
     </scroll>
 
-    <back-top @click.native="backTop" v-show="isShowBackTop"/>
+    <back-top @click.native="backTop" v-show="isShowBackTop"></back-top>
   </div>
 </template>
 
@@ -38,7 +38,6 @@
 
   import TabControl from "components/content/tabControl/TabControl";
   import GoodsList from "components/content/goods/GoodsList";
-  import BackTop from "components/content/backTop/BackTop";
 
   import HomeSwiper from "views/home/homeCpns/HomeSwiper";
   import HomeRecommend from "views/home/homeCpns/HomeRecommend";
@@ -46,10 +45,19 @@
 
   import { getHomeMultidata,getHomeGoods } from "network/home";
 
-  import { debounce } from "common/utils.js";
+  import { itemImageLoadRefreshMixin,backTopMixin } from "common/mixin";
 
   export default {
     name: "Home",
+    components: {
+      Scroll,
+      GoodsList,
+      TabControl,
+      HomeFeature,
+      HomeRecommend,
+      NavBar,
+      HomeSwiper,
+    },
     data() {
       return {
         banners: [],
@@ -60,24 +68,16 @@
           sell: {page: 0,list: [],scrollY:null}
         },
         currentType: 'pop',
-        refresh: null,
-        isShowBackTop: false,
         isShowTabControl: false,
         tabControlTop: null,
         goodsTop: null,
         scrollY: null,
       }
     },
-    components: {
-      BackTop,
-      Scroll,
-      GoodsList,
-      TabControl,
-      HomeFeature,
-      HomeRecommend,
-      NavBar,
-      HomeSwiper,
-    },
+    mixins:[
+      itemImageLoadRefreshMixin,
+      backTopMixin
+    ],
     created() {
       // 获取 轮播图 及 推荐商品 数据;
       this.getHomeMultidata();
@@ -85,13 +85,6 @@
       this.getHomeGoods('pop');
       this.getHomeGoods('new');
       this.getHomeGoods('sell');
-    },
-    mounted() {
-      // 事件总线 管理 图片加载完成 事件; 事件触发 使用 scroll 的 refresh() 刷新 scroll 的 可滚动高度;
-      this.refresh = debounce(this.$refs.scroll.refresh);
-      this.$bus.$on('imgLoadFull', () => {
-        this.refresh();
-      })
     },
     computed: {
       showGoods() {
@@ -141,9 +134,6 @@
         // 2. 商品tab栏 是否吸顶
         this.isShowTabControl = (- position.y) >= this.tabControlTop;
       },
-      backTop() {
-        this.$refs.scroll.scrollTo(0, 0);
-      },
       loadMore() {
         this.getHomeGoods(this.currentType);
       },
@@ -182,13 +172,19 @@
       }
     },
     deactivated() {
+      // 记录离开当前页面时的 Y值;
       this.scrollY = this.$refs.scroll.getScrollY();
+      // 移除该页面的 $bus 的 某个事件;
+      this.busRemoveListener();
     },
     activated() {
       if(this.scrollY) {
         this.$refs.scroll.scrollTo(0, this.scrollY, 0);
         this.$refs.scroll.refresh();
       }
+      // 添加该页面的 $bus 的 某个事件; 当然要先 解绑 一下以防重复 绑定
+      this.busRemoveListener();
+      this.busAddListener();
     }
   }
 </script>
@@ -197,6 +193,11 @@
   #home{
     position: relative;
     height: calc(100% - 49px);
+  }
+
+  .home-nav-bar{
+    background-color: #ff8198;
+    color: #fff;
   }
 
   #home-scroll{

@@ -209,9 +209,11 @@
   .swiper {
     overflow: hidden;
     position: relative;
+    height: 100%;
   }
   .slides {
     display: flex;
+    height: 100%;
   }
 
   .indicator {

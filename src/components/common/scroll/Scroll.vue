@@ -1,5 +1,5 @@
 <template>
-  <div class="scroll" ref="warper">
+  <div class="scroll" ref="wraper">
     <div class="sc-inner">
       <slot></slot>
     </div>
@@ -27,7 +27,7 @@
     },
     mounted() {
       // 创建 BScroll 实例,并添加配置信息;
-      this.scroll = new BScroll(this.$refs.warper,{
+      this.scroll = new BScroll(this.$refs.wraper,{
         click: true,
         probeType: this.probeType,
         pullUpLoad: this.pullUpLoad,
@@ -51,19 +51,15 @@
       scrollTo(x, y, time = 300) {
         this.scroll && this.scroll.scrollTo(x, y, time);
       },
-
       finishPullUp() {
         this.scroll && this.scroll.finishPullUp && this.scroll.finishPullUp();
       },
-
       refresh() {
         this.scroll && this.scroll.refresh && this.scroll.refresh();
       },
-
       getScrollY() {
-        return this.scroll ? this.scroll.y : 0;
+        return (this.scroll && this.scroll.y) ? this.scroll.y : 0;
       }
-
     }
   }
 </script>

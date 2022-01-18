@@ -7,6 +7,16 @@ const Shopcart = () => import('views/shopcart/Shopcart.vue');
 const Profile = () => import('views/profile/Profile.vue');
 const Detail = () => import('views/detail/Detail.vue');
 
+// 避免重复点击同一路由报错！
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+const originalReplace = VueRouter.prototype.push
+VueRouter.prototype.replace = function replace(location) {
+  return originalReplace.call(this, location).catch(err => err)
+}
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -31,7 +41,7 @@ const routes = [
     component: Profile
   },
   {
-    path: '/detail/:iid',
+    path: '/detail',
     component: Detail
   }
 ]

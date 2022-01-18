@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="clickGoodsItem">
-    <img :src="goodsItem.show.img" @load="imgLoadFull"/>
+    <img :src="showImage" :key="showImage" @load="imgLoadFull"/>
     <div class="goods-item-text">
       <p class="goods-item-title">{{goodsItem.title}}</p>
       <span class="goods-item-price">{{goodsItem.price}}</span>
@@ -25,7 +25,21 @@ export default {
       this.$bus.$emit('imgLoadFull');
     },
     clickGoodsItem() {
-      this.$router.push('/detail/' + this.goodsItem.iid);
+      if(this.goodsItem.iid) {
+        this.$router.push({
+          path: '/detail',
+          query: {
+            iid: this.goodsItem.iid
+          }
+        });
+      } else {
+        console.log(':( 很遗憾,目前没有该功能.——【详情页的推荐商品没有更具体的数据,所以无法跳转;】')
+      }
+    }
+  },
+  computed:{
+    showImage() {
+      return (this.goodsItem.show && this.goodsItem.show.img) || this.goodsItem.image;
     }
   }
 }
