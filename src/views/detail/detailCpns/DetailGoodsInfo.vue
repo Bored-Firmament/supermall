@@ -33,7 +33,7 @@
     },
     updated() {
       // 避免重复赋值~
-      if(this.imgCount.length == 0) {
+      if(this.imgCount && this.imgCount.length == 0) {
         // 记录 图片列表 的图片数量 的数组;
         // 添加 图片列表 对应的 已完成加载 的图片 的数组;
         for(let index in this.goodsInfo.detailImage){

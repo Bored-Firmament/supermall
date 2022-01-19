@@ -2,7 +2,7 @@
   <div id="home-recommend">
     <div v-for="item in recommends" class="recommend-item">
       <a :href="item.link">
-        <img :src="item.image" :alt="item.title" :title="item.title">
+        <img :src="item.image" :alt="item.title" :title="item.title" @load="imgLoadFull"/>
         <p>{{item.title}}</p>
       </a>
     </div>
@@ -17,6 +17,14 @@ export default {
       type: Array,
       default(){
         return []
+      }
+    }
+  },
+  methods: {
+    imgLoadFull() {
+      if(!this.isLoad) {
+        this.isLoad = !this.isLoad;
+        this.$emit('imgLoadFull');
       }
     }
   }

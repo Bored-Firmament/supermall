@@ -2,8 +2,8 @@ import {debounce} from "common/utils";
 
 import BackTop from "components/content/backTop/BackTop";
 
-// 图片列表加载刷新
-export const itemImageLoadRefreshMixin = {
+// 图片加载刷新
+export const imageLoadRefreshMixin = {
   data() {
     return {
       refresh: null,
@@ -27,18 +27,23 @@ export const itemImageLoadRefreshMixin = {
   }
 }
 
+// 回到顶部
 export const backTopMixin = {
   components: {
     BackTop
   },
   data() {
     return {
-      isShowBackTop: false
+      isShowBackTop: false,
+      showBackTopSize: 1000,
     }
   },
   methods: {
-    backTop() {
+    backTop(){
       this.$refs.scroll.scrollTo(0, 0);
+    },
+    isShowBack(position){
+      this.isShowBackTop = position > this.showBackTopSize;
     }
   }
 }

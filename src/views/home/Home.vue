@@ -9,7 +9,7 @@
       @clickTabControlItem="clickTabControlItem"
       ref="tabControl1"
       class="tab-control-1"
-      v-show="isShowTabControl"/>
+      v-show="isShowTabControl"></tab-control>
     <scroll
       id="home-scroll"
       ref="scroll"
@@ -17,14 +17,14 @@
       :pull-up-load="true"
       @scroll="contentScroll"
       @pullingUp="loadMore">
-      <home-swiper :banners="banners" @imgLoadFull="swiperImgLoadFull"/>
-      <home-recommend :recommends="recommends"/>
-      <home-feature/>
+      <home-swiper :banners="banners" @imgLoadFull="bigImgLoadFull"></home-swiper>
+      <home-recommend :recommends="recommends" @imgLoadFull="bigImgLoadFull"></home-recommend>
+      <home-feature @imgLoadFull="bigImgLoadFull"></home-feature>
 
       <tab-control
         :list="['流行','新款','精选']"
         @clickTabControlItem="clickTabControlItem"
-        ref="tabControl2"/>
+        ref="tabControl2"></tab-control>
       <goods-list :goods="showGoods" ref="goods"></goods-list>
     </scroll>
 
@@ -45,7 +45,7 @@
 
   import { getHomeMultidata,getHomeGoods } from "network/home";
 
-  import { itemImageLoadRefreshMixin,backTopMixin } from "common/mixin";
+  import { imageLoadRefreshMixin,backTopMixin } from "common/mixin";
 
   export default {
     name: "Home",
@@ -75,7 +75,7 @@
       }
     },
     mixins:[
-      itemImageLoadRefreshMixin,
+      imageLoadRefreshMixin,
       backTopMixin
     ],
     created() {
@@ -126,19 +126,22 @@
         }else if(-this.getGoodsTabY < this.goodsTop) {
           this.$refs.scroll.scrollTo(0, -this.goodsTop, 100);
         }
+        // 是否显示回到顶部;
+        this.isShowBack(-this.getGoodsTabY);
       },
       // scroll 滚动时实时触发;
       contentScroll(position) {
+        const positionY = - position.y;
         // 1. 返回顶部 是否显示
-        this.isShowBackTop = (- position.y) > 1000;
+        this.isShowBack(positionY);
         // 2. 商品tab栏 是否吸顶
-        this.isShowTabControl = (- position.y) >= this.tabControlTop;
+        this.isShowTabControl = positionY >= this.tabControlTop;
       },
       loadMore() {
         this.getHomeGoods(this.currentType);
       },
       // 轮播图加载完成后触发该函数(否则图片未加载的位置不正确);
-      swiperImgLoadFull() {
+      bigImgLoadFull() {
         // 获取 tab-control 的位置,
         this.tabControlTop = this.$refs.tabControl2.$el.offsetTop;
         // 获取 商品列表 的位置,

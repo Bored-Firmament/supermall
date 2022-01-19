@@ -1,6 +1,6 @@
 <template>
   <div id="detail">
-    <detail-nav-bar @clickItem="clickItem"></detail-nav-bar>
+    <detail-nav-bar ref="detailNavBar" @clickItem="clickItem"></detail-nav-bar>
     <scroll
       id="detail-scroll"
       ref="scroll"
@@ -37,12 +37,11 @@
 
   import { getDetail,getDetailRecommend,Goods,Shop,GoodsParam } from "network/detail";
 
-  import { itemImageLoadRefreshMixin,backTopMixin } from "common/mixin";
+  import { imageLoadRefreshMixin,backTopMixin } from "common/mixin";
 
   export default {
     name: "Detail",
     components: {
-      DetailBottomBar,
       Scroll,
       DetailNavBar,
       DetailSwiper,
@@ -51,7 +50,8 @@
       DetailGoodsInfo,
       DetailParamInfo,
       DetailComment,
-      DetailRecommend
+      DetailRecommend,
+      DetailBottomBar
     },
     data() {
       return {
@@ -63,11 +63,12 @@
         paramInfo: {},
         comments: [],
         recommends: [],
-        themeTopYs: []
+        themeTopYs: [],
+        currentIndex: 0
       }
     },
     mixins:[
-      itemImageLoadRefreshMixin,
+      imageLoadRefreshMixin,
       backTopMixin
     ],
     created() {
@@ -96,18 +97,37 @@
         this.refresh();
       },
       clickItem(index){
-        this.$refs.scroll.scrollTo(0, -this.themeTopYs[index]);
+        this.currentIndex = index;
+        this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 0);
+        // 滚动时间为0 可以避免 顶部导航栏 选中闪烁;产生新问题——回到顶部 不显示;
+        this.isShowBack(this.themeTopYs[index]);
       },
       addGoods(){
-        console.log('添加商品');
-        // console.log('价格:' + this.goods.realPrice);
-        // console.log('图片:' + this.topImages[0]);
-        // console.log('商品名称:' + this.goods.title);
-        // console.log('商品描述:' + this.detailInfo.desc);
+        // 后台提供的接口无法更好的完成,只能这样了;
+        let product = {};
+        product.iid = this.iid;
+        product.title = this.goods.title;
+        product.image = this.topImages[0];
+        product.price = this.goods.realPrice;
+        product.desc = this.detailInfo.desc;
+        this.$store.dispatch('addGoods',product).then(res => {
+          console.log(res);
+        });
       },
       contentScroll(position) {
-        // 返回顶部 是否显示
-        this.isShowBackTop = (- position.y) > 1000;
+        const positionY = -position.y;
+        // 1. 返回顶部 是否显示
+        this.isShowBack(positionY);
+        // 2. 关联 内容滚动 和 顶部导航栏 的选中;
+        const length = this.themeTopYs.length;
+        for(let i = 0; i < length; i++){
+          if((this.currentIndex !== i)
+            && ((i < length - 1 && positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i+1])
+              || (i === length - 1 && positionY >= this.themeTopYs[i]))) {
+            this.currentIndex = i;
+            this.$refs.detailNavBar.currentIndex = this.currentIndex;
+          }
+        }
       },
       touchEnd() {
         console.log('已经触底啦,目前没有更多的推荐商品~');
