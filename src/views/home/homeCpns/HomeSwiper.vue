@@ -19,17 +19,17 @@ export default {
     Swiper,
     SwiperItem
   },
-  data() {
-    return {
-      isLoad: false,
-    }
-  },
   props: {
     banners: {
       type: Array,
       default(){
         return []
       }
+    }
+  },
+  data() {
+    return {
+      isLoad: false,
     }
   },
   methods: {

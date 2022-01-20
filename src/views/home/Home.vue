@@ -58,6 +58,10 @@
       NavBar,
       HomeSwiper,
     },
+    mixins:[
+      imageLoadRefreshMixin,
+      backTopMixin
+    ],
     data() {
       return {
         banners: [],
@@ -74,10 +78,6 @@
         scrollY: null,
       }
     },
-    mixins:[
-      imageLoadRefreshMixin,
-      backTopMixin
-    ],
     created() {
       // 获取 轮播图 及 推荐商品 数据;
       this.getHomeMultidata();
@@ -140,7 +140,7 @@
       loadMore() {
         this.getHomeGoods(this.currentType);
       },
-      // 轮播图加载完成后触发该函数(否则图片未加载的位置不正确);
+      // 商品选项卡之上的图片 加载完成后触发该函数(否则图片未加载的位置不正确);
       bigImgLoadFull() {
         // 获取 tab-control 的位置,
         this.tabControlTop = this.$refs.tabControl2.$el.offsetTop;
@@ -157,7 +157,7 @@
             this.banners = res.data.banner.list;
             this.recommends = res.data.recommend.list;
           }).catch(err => {
-            console.log('请求首页基本资源出错啦！', err);
+            console.log('请求首页基本资源出错了-', err);
           });
       },
       getHomeGoods(type) {
@@ -170,7 +170,7 @@
             // 完成上拉;
             this.$refs.scroll.finishPullUp();
           }).catch(err => {
-            console.log('请求首页商品资源出错啦！', err);
+            console.log('请求首页商品资源出错了-', err);
           });
       }
     },

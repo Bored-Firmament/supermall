@@ -20,6 +20,11 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      isLoad: false,
+    }
+  },
   methods: {
     imgLoadFull() {
       if(!this.isLoad) {
