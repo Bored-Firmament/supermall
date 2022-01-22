@@ -183,24 +183,25 @@
         })
       }
     },
+    activated() {
+      if(this.pageY1 || this.pageY2) {
+        this.$refs.scrollTheme.scrollTo(0, this.pageY1, 0);
+        this.$refs.scroll.scrollTo(0, this.pageY2, 0);
+      }
+
+      this.$refs.scrollTheme.refresh();
+      this.$refs.scroll.refresh();
+
+      // 添加该页面的 $bus 的 某个事件; 当然要先 解绑 一下以防重复 绑定
+      this.busRemoveListener();
+      this.busAddListener();
+    },
     deactivated() {
       // 记录离开当前页面时的 Y值;
       this.pageY1 = this.$refs.scrollTheme.getScrollY();
       this.pageY2 = this.$refs.scroll.getScrollY();
       // 移除该页面的 $bus 的 某个事件;
       this.busRemoveListener();
-    },
-    activated() {
-      // 离开当前页面,记录 y 值
-      if(this.pageY1 || this.pageY2) {
-        this.$refs.scrollTheme.scrollTo(0, this.pageY1, 0);
-        this.$refs.scroll.scrollTo(0, this.pageY2, 0);
-        this.$refs.scroll.refresh();
-      }
-
-      // 添加该页面的 $bus 的 某个事件; 当然要先 解绑 一下以防重复 绑定
-      this.busRemoveListener();
-      this.busAddListener();
     }
   }
 </script>
