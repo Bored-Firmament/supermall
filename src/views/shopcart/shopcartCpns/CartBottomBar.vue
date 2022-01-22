@@ -7,7 +7,7 @@
     <div class="totalPrice">
       <span>合计: {{checkedProductPriceTotal | priceDecoration}}</span>
     </div>
-    <div class="settlement">
+    <div class="settlement" @click="$toast.show('目前不支持该功能')">
       <span>去结算({{checkedProductCountTotal}})</span>
     </div>
   </div>

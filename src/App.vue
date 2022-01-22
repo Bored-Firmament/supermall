@@ -16,10 +16,6 @@
       MainTabBar
     }
   }
-  // 以下内容等待填充 Toast;
-  // GoodsListItem
-  // Detail
-  // DetailBottomBar
 </script>
 
 <style>

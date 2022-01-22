@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="clickGoodsItem">
-    <img :src="showImage" :key="goodsItem.iid" @load="imgLoadFull"/>
+    <img v-lazy="showImage" :key="goodsItem.iid" @load="imgLoadFull"/>
     <div class="goods-item-text">
       <p class="goods-item-title">{{goodsItem.title}}</p>
       <span class="goods-item-price">{{goodsItem.price}}</span>
@@ -33,7 +33,7 @@ export default {
           }
         });
       } else {
-        console.log(':( 很遗憾,目前没有该功能.——【详情页的推荐商品没有更具体的数据,所以无法跳转;】')
+        this.$toast.show('很抱歉,目前没有该功能')
       }
     }
   },

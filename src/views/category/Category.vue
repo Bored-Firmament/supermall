@@ -147,7 +147,6 @@
        * */
       getCategory() {
         getCategory().then(res => {
-          console.log('列表资源', res.data);
           // 保存 一级列表 数据
           this.category = res.data.category.list;
           // 记录 当前选中的 一级列表 的id

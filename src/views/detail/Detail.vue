@@ -111,7 +111,7 @@
         product.price = this.goods.realPrice;
         product.desc = this.detailInfo.desc;
         this.$store.dispatch('addGoods',product).then(res => {
-          console.log(res);
+          this.$toast.show(res);
         });
       },
       contentScroll(position) {
@@ -130,7 +130,7 @@
         }
       },
       touchEnd() {
-        console.log('已经触底啦,目前没有更多的推荐商品~');
+        this.$toast.show("已经触底啦,目前没有更多的推荐商品~");
         // 完成上拉;
         this.$refs.scroll.finishPullUp();
       },

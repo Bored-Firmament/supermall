@@ -41,7 +41,7 @@
         this.$emit('addGoods');
       },
       buyGoods(){
-        console.log('后台暂未提供该功能');
+        this.$toast.show('后台暂未提供该功能')
       }
     }
   }
