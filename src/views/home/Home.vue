@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <nav-bar class="home-nav-bar">
+    <nav-bar id="home-nav-bar">
       <template v-slot:center>购物街</template>
     </nav-bar>
 
@@ -198,9 +198,9 @@
     height: calc(100% - 49px);
   }
 
-  .home-nav-bar{
-    background-color: #ff8198;
-    color: #fff;
+  #home-nav-bar{
+    background-color: var(--color-tint);
+    color: var(--color-background);
   }
 
   #home-scroll{

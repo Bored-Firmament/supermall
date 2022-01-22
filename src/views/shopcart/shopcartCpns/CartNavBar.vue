@@ -1,5 +1,5 @@
 <template>
-  <nav-bar class="shopcart-nav-bar">
+  <nav-bar id="shopcart-nav-bar">
     <template v-slot:center>购物车({{$store.getters.cartLength}})</template>
   </nav-bar>
 </template>
@@ -16,8 +16,8 @@
 </script>
 
 <style scoped>
-  .shopcart-nav-bar{
-    background-color: #ff8198;
-    color: #fff;
+  #shopcart-nav-bar{
+    background-color: var(--color-tint);
+    color: var(--color-background);
   }
 </style>

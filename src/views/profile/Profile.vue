@@ -1,7 +1,7 @@
 <template>
   <div id="profile">
     <!-- 档案页(个人页)-导航栏 -->
-    <nav-bar class="profile-nav-bar">
+    <nav-bar id="profile-nav-bar">
       <template v-slot:center>购物街</template>
     </nav-bar>
     <!-- 档案页(个人页)-用户基础信息/(登录/注册) -->
@@ -53,7 +53,7 @@
   width: 100%;
 }
 
-.profile-nav-bar {
+#profile-nav-bar {
   background-color: var(--color-tint);
   color: var(--color-background);
 }

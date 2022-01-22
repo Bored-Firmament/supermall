@@ -1,5 +1,5 @@
 <template>
-  <nav-bar class="category-nav-bar">
+  <nav-bar id="category-nav-bar">
     <template v-slot:center>商品分类</template>
   </nav-bar>
 </template>
@@ -16,8 +16,8 @@
 </script>
 
 <style scoped>
-  .category-nav-bar{
+  #category-nav-bar{
     background-color: var(--color-tint);
-    color: #fff;
+    color: var(--color-background);
   }
 </style>
