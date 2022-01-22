@@ -35,7 +35,7 @@
     flex-wrap: wrap;
   }
   .sub-menu-item{
-    max-width: 70px;
+    max-width: 65px;
     flex: 1;
 
     display: flex;

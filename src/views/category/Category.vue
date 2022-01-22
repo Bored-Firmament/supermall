@@ -28,7 +28,7 @@
             ref="tabControl2"
           ></tab-control>
 
-          <goods-list :goods="showGoods" ref="goods"></goods-list>
+          <goods-list :goods="showGoods" ref="goods" id="category-goods-list"></goods-list>
         </scroll>
 
         <back-top @click.native="backTop" v-show="isShowBackTop"></back-top>
@@ -112,12 +112,16 @@
         }
         this.$refs.tabControl1.currentIndex = event;
         this.$refs.tabControl2.currentIndex = event;
+        this.$refs.scroll.scrollTo(0,0,0);
+        this.isShowTabControl = false;
+
         // 是否显示回到顶部;
         this.isShowBack(-this.getGoodsTabY);
 
         this.getCategoryDetail(this.miniWallkey, this.currentType);
       },
       contentScroll(position) {
+        this.getTbaControlTop();
         const positionY = - position.y;
         // 1. 返回顶部 是否显示
         this.isShowBack(positionY);
@@ -135,7 +139,7 @@
         this.$refs.tabControl1.currentIndex = 0;
         this.$refs.tabControl2.currentIndex = 0;
         this.$refs.scroll.scrollTo(0,0,0);
-
+        this.isShowTabControl = false;
 
         this.miniWallkey = event.miniWallkey;
         this.getSubcategory(event.maitKey);
@@ -232,7 +236,7 @@
     background-color: #f6f6f6;
   }
   .category-main-right{
-    max-width: 270px;
+    max-width: 250px;
     flex: 1;
 
     position: relative;
