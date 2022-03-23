@@ -232,12 +232,12 @@
   }
   .category-main-left{
     width: 100px;
-    min-width: 70px;
+    flex: none;
     background-color: #f6f6f6;
   }
   .category-main-right{
-    max-width: 250px;
     flex: 1;
+    overflow: hidden;
 
     position: relative;
   }

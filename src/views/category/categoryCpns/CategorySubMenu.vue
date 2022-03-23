@@ -35,16 +35,21 @@
     flex-wrap: wrap;
   }
   .sub-menu-item{
-    max-width: 65px;
-    flex: 1;
+    width: 33%;
+    margin: 8px 0;
 
     display: flex;
     flex-direction: column;
-    margin: 8px;
     text-align: center;
   }
+  .sub-menu-item:nth-child(3n+1),
+  .sub-menu-item:nth-child(3n+2) {
+    margin-right: 0.5%;
+  }
   .sub-menu-item img{
-    max-height: 70px;
+    width: 70px;
+    height: 70px;
+    margin: auto;
   }
   .sub-menu-item span{
     margin-top: 5px;
